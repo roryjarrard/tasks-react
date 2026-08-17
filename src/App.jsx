@@ -1,20 +1,30 @@
-import { useState } from "react";
-import WelcomeMessage from "./components/WelcomeMessage";
-import TaskList from "./components/TaskList";
+import { Link, Route, Routes } from "react-router-dom";
+
+import DashboardPage from "./pages/DashboardPage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
-  const [tasks] = useState([
-    {id: 1, title: "Learn React components", completed: false},
-    {id: 2, title: "Understand props and state", completed: true},
-  ])
-
   return (
     <main>
+      <nav>
+        <Link to="/">Home</Link>{" "}
+        <Link to="/register">Register</Link>{" "}
+        <Link to="/login">Login</Link>{" "}
+        <Link to="/dashboard">Dashboard</Link>{" "}
+      </nav>
+
       <h1>Task Management Application</h1>
-      <WelcomeMessage name="Reader" />
-      <TaskList tasks={tasks} />
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Routes>
     </main>
-  );
+  )
 }
 
 export default App;
