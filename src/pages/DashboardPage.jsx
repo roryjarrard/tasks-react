@@ -1,10 +1,27 @@
+import { useEffect, useState } from "react"
+import { fetchTasks } from "../services/api"
+
 function DashboardPage() {
+    const [tasks, setTasks] = useState([])
+
+    useEffect(() => {
+        async function loadTasks() {
+            const data = await fetchTasks()
+            setTasks(data)
+        }
+
+        loadTasks()
+    }, [])
+
     return (
         <section>
             <h2>Your Dashboard</h2>
 
-            <p>This page will eventually display the authenticated user's tasks and
-                provide tools for creating, updating, and deleting them.</p>
+            {tasks.map((task) => (
+                <p key={task.id}>
+                    {task.title} {task.completed ? "(Completed)" : "(Pending)"}
+                </p>
+            ))}
         </section>
     )
 }
