@@ -41,6 +41,8 @@ function DashboardPage() {
         <section>
             <h2>Your Dashboard</h2>
 
+            {errorMessage && <p>{errorMessage}</p>}
+
             <TaskForm onTaskCreated={handleTaskCreated} />
 
             {tasks.length === 0 ? (
