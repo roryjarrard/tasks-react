@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import '../styles/form.css'
+
 function LoginForm({ onLogin }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -25,29 +27,37 @@ function LoginForm({ onLogin }) {
     }
     return (
         <form onSubmit={handleSubmit}>
-            <label htmlFor="email">Email Address</label>
-            <input
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-            />
+            <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                />
+            </div>
 
-            <label htmlFor="password">Password</label>
-            <input
-                type="password"
-                name="password"
-                id="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-            />
+            <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                />
+            </div>
 
-            {errorMessage && <p>{errorMessage}</p>}
+            <div className='form-errors'>
+                {errorMessage && <p>{errorMessage}</p>}
+            </div>
 
-            <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Logging in...' : 'Log In'}
-            </button>
+            <div className='form-actions'>
+                <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Logging in...' : 'Log In'}
+                </button>
+            </div>
         </form>
     )
 }
