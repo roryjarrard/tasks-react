@@ -1,11 +1,22 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 
+import { logoutUser } from "./services/api";
 import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
+import './styles/mainNav.css';
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logoutUser();
+    navigate("/login")
+  }
+
   return (
     <main>
       <nav>
@@ -13,6 +24,7 @@ function App() {
         <Link to="/register">Register</Link>{" "}
         <Link to="/login">Login</Link>{" "}
         <Link to="/dashboard">Dashboard</Link>{" "}
+        <button type="button" onClick={handleLogout}>Logout</button>
       </nav>
 
       <h1>Task Management Application</h1>
@@ -21,7 +33,11 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        } />
       </Routes>
     </main>
   )

@@ -9,8 +9,48 @@ async function getErrorMessage(response, fallbackMessage) {
   }
 }
 
+function getAuthHeaders() {
+  const token = localStorage.getItem("access_token");
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+export function isAuthenticated() {
+  return Boolean(localStorage.getItem("access_token"));
+}
+
+export async function loginUser(loginData) {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(loginData),
+  });
+
+  if (!response.ok) {
+    const message = await getErrorMessage(
+      response,
+      "Invalid email or password",
+    );
+
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
+export function logoutUser() {
+  localStorage.removeItem("access_token");
+}
+
 export async function fetchTasks() {
-  const response = await fetch(`${API_BASE_URL}/tasks/`);
+  const response = await fetch(`${API_BASE_URL}/tasks/`, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
     const message = await getErrorMessage(response, "Failed to load tasks.");
@@ -24,9 +64,7 @@ export async function fetchTasks() {
 export async function createTask(taskData) {
   const response = await fetch(`${API_BASE_URL}/tasks/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(taskData),
   });
 

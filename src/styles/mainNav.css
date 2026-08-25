@@ -1,0 +1,20 @@
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border: 1px solid red;
+}
+
+nav a {
+    border: 1px solid gray;
+    padding: 3px 10px;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    cursor: pointer;
+    background-color: lightgreen;
+    color: darkblue;
+}
