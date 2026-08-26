@@ -6,6 +6,7 @@ import TaskList from "../components/TaskList"
 
 function DashboardPage() {
     const [tasks, setTasks] = useState([])
+    const [filter, setFilter] = useState('all')
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -24,6 +25,18 @@ function DashboardPage() {
 
         loadTasks()
     }, [])
+
+    const visibleTasks = tasks.filter((task) => {
+        if (filter === 'completed') {
+            return task.completed;
+        }
+
+        if (filter === 'pending') {
+            return !task.completed;
+        }
+
+        return true;
+    })
 
     async function handleTaskCreated(taskData) {
         const newTask = await createTask(taskData)
@@ -51,7 +64,14 @@ function DashboardPage() {
             ) : (
                 <>
                     <hr />
-                    <TaskList tasks={tasks} />
+
+                    <div>
+                        <button type='button' onClick={() => setFilter('all')}>All</button>
+                        <button type='button' onClick={() => setFilter('pending')}>Pending</button>
+                        <button type='button' onClick={() => setFilter('completed')}>Completed</button>
+                    </div>
+
+                    <TaskList tasks={visibleTasks} />
                 </>
             )}
 
