@@ -1,0 +1,15 @@
+.task-list {
+    margin-top: 50px;
+}
+
+.task-list section {
+    width: 50%;
+    margin: auto;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}

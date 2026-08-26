@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 
 import TaskForm from "../components/TaskForm"
 import { fetchTasks, createTask } from "../services/api"
+import TaskList from "../components/TaskList"
 
 function DashboardPage() {
     const [tasks, setTasks] = useState([])
@@ -48,11 +49,10 @@ function DashboardPage() {
             {tasks.length === 0 ? (
                 <p>No tasks found yet. Create your first task to get started.</p>
             ) : (
-                tasks.map((task) => (
-                    <p key={task.id}>
-                        {task.title} {task.completed ? "(Completed)" : "(Pending)"}
-                    </p>
-                ))
+                <>
+                    <hr />
+                    <TaskList tasks={tasks} />
+                </>
             )}
 
 
