@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import TaskForm from "../components/TaskForm"
-import { fetchTasks, createTask } from "../services/api"
+import { fetchTasks, createTask, updateTask, deleteTask } from "../services/api"
 import TaskList from "../components/TaskList"
 
 function DashboardPage() {
@@ -9,6 +9,7 @@ function DashboardPage() {
     const [filter, setFilter] = useState('all')
     const [isLoading, setIsLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState('')
+    const [actionError, setActionError] = useState('')
 
     useEffect(() => {
         async function loadTasks() {
@@ -43,6 +44,37 @@ function DashboardPage() {
         setTasks((currentTasks) => [...currentTasks, newTask])
     }
 
+    async function handleToggleComplete(task) {
+        try {
+            setActionError('')
+
+            const updatedTask = await updateTask(task.id, {
+                title: task.title,
+                completed: !task.completed,
+            })
+
+            setTasks((currentTasks) =>
+                currentTasks.map((item) =>
+                    item.id === updatedTask.id ? updatedTask : item
+                )
+            )
+        } catch (error) {
+            setActionError(error.message)
+        }
+    }
+
+    async function handleDeleteTask(taskId) {
+        try {
+            setActionError('')
+
+            await deleteTask(taskId)
+
+            setTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskId))
+        } catch (error) {
+            setActionError(error.message)
+        }
+    }
+
     if (isLoading) {
         return <p>Loading tasks...</p>
     }
@@ -59,21 +91,30 @@ function DashboardPage() {
 
             <TaskForm onTaskCreated={handleTaskCreated} />
 
+            <hr />
+
+            <div>
+                <button type='button' onClick={() => setFilter('all')}>All</button>
+                <button type='button' onClick={() => setFilter('pending')}>Pending</button>
+                <button type='button' onClick={() => setFilter('completed')}>Completed</button>
+            </div>
+
             {tasks.length === 0 ? (
                 <p>No tasks found yet. Create your first task to get started.</p>
-            ) : (
-                <>
-                    <hr />
+            ) : visibleTasks.length === 0 ? (
+                <p>No tasks match the selected filter.</p>
+            ) :
+                (
+                    <>
+                        {actionError && <p>{actionError}</p>}
 
-                    <div>
-                        <button type='button' onClick={() => setFilter('all')}>All</button>
-                        <button type='button' onClick={() => setFilter('pending')}>Pending</button>
-                        <button type='button' onClick={() => setFilter('completed')}>Completed</button>
-                    </div>
-
-                    <TaskList tasks={visibleTasks} />
-                </>
-            )}
+                        <TaskList
+                            tasks={visibleTasks}
+                            onToggleComplete={handleToggleComplete}
+                            onDelete={handleDeleteTask}
+                        />
+                    </>
+                )}
 
 
         </section>

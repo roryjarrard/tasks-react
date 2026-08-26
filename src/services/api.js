@@ -75,3 +75,44 @@ export async function createTask(taskData) {
 
   return await response.json();
 }
+
+export async function updateTask(taskId, taskData) {
+  const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(taskData),
+  });
+
+  if (response.status === 401) {
+    logoutUser();
+    throw new Error("Your session has expired. Please log in again.");
+  }
+
+  if (!response.ok) {
+    const message = await getErrorMessage(response, "Failed to update task");
+
+    throw new Error(message);
+  }
+
+  return await response.json();
+}
+
+export async function deleteTask(taskId) {
+  const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+
+  if (response.status === 401) {
+    logoutUser();
+    throw new Error("Your session has expired. Please log in again.");
+  }
+
+  if (!response.ok) {
+    const message = await getErrorMessage(response, "Failed to delete task.");
+
+    throw new Error(message);
+  }
+
+  return await response.json();
+}

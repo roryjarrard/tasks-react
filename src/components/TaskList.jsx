@@ -1,17 +1,19 @@
+import TasklItem from './TasklItem';
+
 import '../styles/taskList.css';
 
-function TaskList({ tasks }) {
+function TaskList({ tasks, onToggleComplete, onDelete }) {
     return (
-        <div className='task-list'>
-            <section>
-                {tasks.map((task) => (
-                    <article key={task.id}>
-                        <p>{task.title}</p>
-                        <p>{task.completed ? '(Completed)' : '(Pending)'}</p>
-                    </article>
-                ))}
-            </section>
-        </div>
+        <section>
+            {tasks.map((task) => (
+                <TasklItem
+                    key={task.id}
+                    task={task}
+                    onToggleComplete={onToggleComplete}
+                    onDelete={onDelete}
+                />
+            ))}
+        </section>
     )
 }
 
