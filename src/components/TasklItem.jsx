@@ -1,9 +1,9 @@
 function TasklItem({ task, onToggleComplete, onDelete }) {
     return (
         <article>
-            <p>
-                {task.title} ({task.completed ? 'Completed' : 'Pending'})
-            </p>
+            <h3>{task.title}</h3>
+
+            <p>Status: {task.completed ? 'Completed' : 'Pending'}</p>
 
             <button type="button" onClick={() => onToggleComplete(task)}>
                 {task.completed ? 'Mark Pending' : 'Mark Complete'}
